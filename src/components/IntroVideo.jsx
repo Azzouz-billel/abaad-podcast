@@ -13,6 +13,7 @@ const MAX_DURATION_MS = 12000
  */
 export function IntroVideo({ onFinish }) {
   const rootRef = useRef(null)
+  const videoRef = useRef(null)
   const finishedRef = useRef(false)
   const finishRef = useRef(() => {})
   const onFinishRef = useRef(onFinish)
@@ -50,9 +51,24 @@ export function IntroVideo({ onFinish }) {
     }
 
     finishRef.current = finish
-    const fallback = setTimeout(finish, MAX_DURATION_MS)
+
+    // The video's `ended` event is the primary dismiss. These guard the cases
+    // where it never fires (autoplay blocked, codec missing): dismiss at the
+    // clip's real length, falling back to a hard cap until the duration is known.
+    const video = videoRef.current
+    let timer = setTimeout(finish, MAX_DURATION_MS)
+    const onMeta = () => {
+      if (!video || !Number.isFinite(video.duration) || video.duration <= 0) return
+      clearTimeout(timer)
+      timer = setTimeout(finish, video.duration * 1000 + 600)
+    }
+    video?.addEventListener('loadedmetadata', onMeta)
+    // Some browsers ignore the autoPlay attribute when sources are <source> tags.
+    video?.play?.().catch(() => {})
+
     return () => {
-      clearTimeout(fallback)
+      clearTimeout(timer)
+      video?.removeEventListener('loadedmetadata', onMeta)
       scroller.style.overflow = previousOverflow
     }
   }, [])
@@ -67,6 +83,7 @@ export function IntroVideo({ onFinish }) {
       aria-label="Intro"
     >
       <video
+        ref={videoRef}
         className="absolute inset-0 h-full w-full object-cover"
         autoPlay
         muted

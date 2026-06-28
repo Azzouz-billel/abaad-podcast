@@ -15,15 +15,15 @@
  */
 export const episodes = [
   {
-    slug: 'the-shape-of-silence',
+    slug: 'NHSM-experience',
     number: '01',
     title: 'The Shape of Silence',
-    guest: 'with Dr. Lina Haddad',
-    duration: '52 min',
-    date: 'June 26, 2026',
+    guest: 'with 5th year nhsm student',
+    duration: '2h 35 min',
+    date: 'June 28, 2026',
     category: 'Guest Episode',
     blurb:
-      'A neuroscientist on why the pauses in a conversation carry as much meaning as the words around them.',
+      'how it was in nhsm the struggles and triumphs that come with it, all this and more in our first episode.',
     accent: 'emerald',
     // Real latest video + its hook Short. Update title/guest/blurb above to match.
     youtubeId: 'j_MN97w7XJs',

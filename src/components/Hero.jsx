@@ -65,7 +65,7 @@ export function Hero({ start = true }) {
     >
       <div className="relative z-20 flex flex-col items-center">
         <p data-reveal className="eyebrow glass mb-8 rounded-full px-4 py-2">
-          Est. 2026 — Conversations in the round
+          One question, the long way round
         </p>
 
         <h1 className="flex flex-col items-center">
