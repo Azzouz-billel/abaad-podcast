@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 
-import { gsap, prefersReducedMotion } from '../lib/gsap'
 import { INTRO_SESSION_KEY } from '../lib/intro'
 
 // A stalled or failed clip must never trap the visitor behind the overlay.
@@ -8,11 +7,10 @@ const MAX_DURATION_MS = 12000
 
 /**
  * Full-screen opening: the brand clip plays once per session over a forest-void
- * backdrop, then fades out to reveal the site. Skippable, and self-dismissing if
- * the video errors or never reaches `ended`.
+ * backdrop, then cuts straight to the site the moment it ends. Skippable, and
+ * self-dismissing if the video errors or never reaches `ended`.
  */
 export function IntroVideo({ onFinish }) {
-  const rootRef = useRef(null)
   const videoRef = useRef(null)
   const finishedRef = useRef(false)
   const finishRef = useRef(() => {})
@@ -37,17 +35,7 @@ export function IntroVideo({ onFinish }) {
         // sessionStorage unavailable (private mode quota) — intro just replays.
       }
       scroller.style.overflow = previousOverflow
-
-      if (!rootRef.current || prefersReducedMotion()) {
-        onFinishRef.current()
-        return
-      }
-      gsap.to(rootRef.current, {
-        opacity: 0,
-        duration: 0.6,
-        ease: 'power2.out',
-        onComplete: () => onFinishRef.current(),
-      })
+      onFinishRef.current()
     }
 
     finishRef.current = finish
@@ -77,7 +65,6 @@ export function IntroVideo({ onFinish }) {
 
   return (
     <div
-      ref={rootRef}
       className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-[linear-gradient(to_bottom,var(--color-void),var(--color-deep))]"
       role="dialog"
       aria-label="Intro"

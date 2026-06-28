@@ -24,24 +24,19 @@ function App() {
         <div className="grain pointer-events-none absolute inset-0" />
       </div>
 
-      <div
-        className="transition-opacity duration-700 ease-out"
-        style={{ opacity: introDone ? 1 : 0 }}
-      >
-        <Nav />
+      <Nav />
 
-        <main className="relative z-10">
-          <Hero start={introDone} />
-          <About />
-          <LatestEpisode />
-          <Episodes />
-          <Hosts />
-          <Contact />
-        </main>
+      <main className="relative z-10">
+        <Hero start={introDone} />
+        <About />
+        <LatestEpisode />
+        <Episodes />
+        <Hosts />
+        <Contact />
+      </main>
 
-        <div className="relative z-10">
-          <Footer />
-        </div>
+      <div className="relative z-10">
+        <Footer />
       </div>
 
       {!introDone && <IntroVideo onFinish={() => setIntroDone(true)} />}

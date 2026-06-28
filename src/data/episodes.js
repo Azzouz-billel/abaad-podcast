@@ -17,7 +17,7 @@ export const episodes = [
   {
     slug: 'NHSM-experience',
     number: '01',
-    title: 'The Shape of Silence',
+    title: 'NHSM experience',
     guest: 'with 5th year nhsm student',
     duration: '2h 35 min',
     date: 'June 28, 2026',
