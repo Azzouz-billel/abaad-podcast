@@ -10,11 +10,36 @@ const FIELD_CLASS =
 
 export function Contact() {
   const scope = useScrollReveal({ stagger: 0.12 })
-  const [sent, setSent] = useState(false)
+  const [status, setStatus] = useState('idle') // idle | sending | sent | error
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    setSent(true)
+    const form = event.currentTarget
+    const data = new FormData(form)
+    setStatus('sending')
+    try {
+      const res = await fetch(`https://formsubmit.co/ajax/${links.email}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name: data.get('name'),
+          email: data.get('email'),
+          message: data.get('message'),
+          _subject: 'New message from the Abaad website',
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (res.ok && String(json.success) === 'true') {
+        form.reset()
+        setStatus('sent')
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
@@ -33,8 +58,8 @@ export function Contact() {
 
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
         <div data-reveal className="glass rounded-3xl p-8 sm:p-10">
-          {sent ? (
-            <div className="flex h-full min-h-56 flex-col items-center justify-center gap-4 text-center">
+          {status === 'sent' ? (
+            <div role="status" className="flex h-full min-h-56 flex-col items-center justify-center gap-4 text-center">
               <CheckCircle2 size={40} className="text-phosphor" strokeWidth={1.5} />
               <p className="font-display text-2xl text-bone">Message on its way.</p>
               <p className="max-w-sm text-moss">
@@ -73,12 +98,20 @@ export function Contact() {
                 />
               </div>
 
+              {status === 'error' && (
+                <p role="alert" className="text-sm text-[#f0a5a5]">
+                  Couldn't send that just now — please try again, or email us directly at{' '}
+                  {links.email}.
+                </p>
+              )}
+
               <button
                 type="submit"
-                className="group mt-1 inline-flex items-center justify-center gap-2.5 self-start rounded-full bg-[linear-gradient(120deg,var(--color-emerald),var(--color-mint))] px-7 py-3.5 font-medium text-[#06120c] shadow-[var(--glow-emerald)] transition-transform duration-300 hover:scale-[1.02]"
+                disabled={status === 'sending'}
+                className="group mt-1 inline-flex items-center justify-center gap-2.5 self-start rounded-full bg-[linear-gradient(120deg,var(--color-emerald),var(--color-mint))] px-7 py-3.5 font-medium text-[#06120c] shadow-[var(--glow-emerald)] transition-transform duration-300 hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
               >
                 <Send size={17} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-                <span>Send message</span>
+                <span>{status === 'sending' ? 'Sending…' : 'Send message'}</span>
               </button>
             </form>
           )}
