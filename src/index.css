@@ -1,0 +1,169 @@
+@import 'tailwindcss';
+
+/* ----------------------------------------------------------------------------
+   أبعاد / Abaad — design tokens
+   Thesis: "dimensions" — layered depth, isometric geometry, forest light.
+   Palette derived from the brand logo (off-white bone ink, warm-phosphor green).
+---------------------------------------------------------------------------- */
+@theme {
+  --color-void: #06120c;
+  --color-deep: #08180f;
+  --color-panel: #0b2018;
+  --color-bone: #e9f2ea;
+  --color-moss: #7d9b86;
+  --color-emerald: #22c55e;
+  --color-mint: #4ade80;
+  --color-phosphor: #b6f08a;
+
+  --font-display: 'Clash Display', 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, monospace;
+  --font-arabic: 'IBM Plex Sans Arabic', 'Inter', sans-serif;
+}
+
+:root {
+  --glass: rgba(16, 40, 28, 0.45);
+  --glass-strong: rgba(13, 32, 23, 0.72);
+  --line: rgba(180, 220, 195, 0.12);
+  --line-bright: rgba(182, 240, 138, 0.32);
+
+  --shadow-depth: 0 28px 80px -32px rgba(0, 0, 0, 0.85);
+  --shadow-lift: 0 10px 40px -18px rgba(0, 0, 0, 0.7);
+  --glow-emerald: 0 0 60px -12px rgba(34, 197, 94, 0.55);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 0.22s;
+  --dur-base: 0.45s;
+
+  --z-canvas: 0;
+  --z-content: 10;
+  --z-nav: 50;
+  --z-overlay: 100;
+}
+
+/* ----------------------------------------------------------------------------
+   Base
+---------------------------------------------------------------------------- */
+@layer base {
+  * {
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: var(--color-void);
+    color: var(--color-bone);
+    font-family: var(--font-body);
+    font-size: clamp(0.95rem, 0.9rem + 0.3vw, 1.05rem);
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: rgba(34, 197, 94, 0.28);
+    color: var(--color-bone);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-phosphor);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-void);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1b3a29;
+    border-radius: 999px;
+    border: 2px solid var(--color-void);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #265138;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Signature utilities
+---------------------------------------------------------------------------- */
+@layer components {
+  .glass {
+    background: var(--glass);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid var(--line);
+  }
+
+  .glass-strong {
+    background: var(--glass-strong);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    border: 1px solid var(--line);
+  }
+
+  .hairline {
+    border: 1px solid var(--line);
+  }
+
+  .text-gradient {
+    background: linear-gradient(
+      105deg,
+      var(--color-bone) 0%,
+      var(--color-phosphor) 45%,
+      var(--color-mint) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Eyebrow label — a "frequency tag" in mono caps */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--color-phosphor);
+  }
+
+  .grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Scroll-reveal initial states (no flash before GSAP runs)
+---------------------------------------------------------------------------- */
+[data-reveal] {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
