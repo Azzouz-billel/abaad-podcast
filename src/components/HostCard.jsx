@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 import { XIcon, InstagramIcon, LinkedinIcon } from './BrandIcons'
 import { prefersReducedMotion } from '../lib/gsap'
@@ -14,6 +14,7 @@ const MAX_TILT = 9
 export function HostCard({ host }) {
   const cardRef = useRef(null)
   const glareRef = useRef(null)
+  const [photoFailed, setPhotoFailed] = useState(false)
   const color = ACCENT_HEX[host.accent] ?? ACCENT_HEX.emerald
 
   const onMove = (event) => {
@@ -45,14 +46,26 @@ export function HostCard({ host }) {
     >
       <div ref={glareRef} className="pointer-events-none absolute inset-0" aria-hidden="true" />
 
-      <div
-        className="flex h-20 w-20 items-center justify-center rounded-2xl font-arabic text-3xl font-bold text-[#06120c]"
-        style={{ background: `linear-gradient(140deg, ${color}, var(--color-mint))` }}
-        dir="rtl"
-        aria-hidden="true"
-      >
-        {host.initials}
-      </div>
+      {host.photo && !photoFailed ? (
+        <img
+          src={host.photo}
+          alt={host.name}
+          width={80}
+          height={80}
+          loading="lazy"
+          onError={() => setPhotoFailed(true)}
+          className="h-20 w-20 rounded-2xl object-cover ring-1 ring-[var(--line-bright)]"
+        />
+      ) : (
+        <div
+          className="flex h-20 w-20 items-center justify-center rounded-2xl font-arabic text-3xl font-bold text-[#06120c]"
+          style={{ background: `linear-gradient(140deg, ${color}, var(--color-mint))` }}
+          dir="rtl"
+          aria-hidden="true"
+        >
+          {host.initials}
+        </div>
+      )}
 
       <h3 className="mt-6 font-display text-2xl font-medium text-bone">{host.name}</h3>
       <p className="mt-1 font-mono text-xs uppercase tracking-[0.2em] text-phosphor">
