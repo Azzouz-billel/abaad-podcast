@@ -7,4 +7,7 @@ export const links = {
   youtube: 'https://www.youtube.com/@ab3adpod',
   instagram: 'https://www.instagram.com/ab3ad.pod/',
   email: 'billel.azzouz@nhsm.dz', // placeholder — swap for your real inbox
+  // Chargily payment link — create one in your Chargily dashboard and paste it
+  // here (Support section "Contribute" button). Leave blank to hide the button.
+  chargily: '',
 }

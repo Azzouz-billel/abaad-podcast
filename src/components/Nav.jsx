@@ -8,6 +8,7 @@ const LINKS = [
   { label: 'About', href: '#about' },
   { label: 'Episodes', href: '#episodes' },
   { label: 'Hosts', href: '#hosts' },
+  { label: 'Support', href: '#support' },
   { label: 'Contact', href: '#contact' },
 ]
 

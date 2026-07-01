@@ -6,6 +6,7 @@ import { About } from './components/About'
 import { LatestEpisode } from './components/LatestEpisode'
 import { Episodes } from './components/Episodes'
 import { Hosts } from './components/Hosts'
+import { Support } from './components/Support'
 import { Contact } from './components/Contact'
 import { Footer } from './components/Footer'
 import { BeamField } from './components/BeamField'
@@ -13,7 +14,10 @@ import { IntroVideo } from './components/IntroVideo'
 import { hasSeenIntro } from './lib/intro'
 
 function App() {
-  const [introDone, setIntroDone] = useState(hasSeenIntro)
+  // `revealed` starts the hero entrance; `introGone` unmounts the overlay once
+  // it has finished dissolving — the two overlap for a single crossfade.
+  const [revealed, setRevealed] = useState(hasSeenIntro)
+  const [introGone, setIntroGone] = useState(hasSeenIntro)
 
   return (
     <>
@@ -27,11 +31,12 @@ function App() {
       <Nav />
 
       <main className="relative z-10">
-        <Hero start={introDone} />
+        <Hero start={revealed} />
         <About />
         <LatestEpisode />
         <Episodes />
         <Hosts />
+        <Support />
         <Contact />
       </main>
 
@@ -39,7 +44,9 @@ function App() {
         <Footer />
       </div>
 
-      {!introDone && <IntroVideo onFinish={() => setIntroDone(true)} />}
+      {!introGone && (
+        <IntroVideo onReveal={() => setRevealed(true)} onExit={() => setIntroGone(true)} />
+      )}
     </>
   )
 }

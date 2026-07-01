@@ -74,13 +74,13 @@ export function HostCard({ host }) {
       <p className="mt-4 max-w-sm leading-relaxed text-moss">{host.bio}</p>
 
       <div className="mt-7 flex items-center gap-4">
-        <a href={host.socials.x} aria-label={`${host.name} on X`} className="text-moss transition-colors duration-300 hover:text-bone">
+        <a href={host.socials.x} target="_blank" rel="noopener noreferrer" aria-label={`${host.name} on X`} className="text-moss transition-colors duration-300 hover:text-bone">
           <XIcon size={17} />
         </a>
-        <a href={host.socials.instagram} aria-label={`${host.name} on Instagram`} className="text-moss transition-colors duration-300 hover:text-bone">
+        <a href={host.socials.instagram} target="_blank" rel="noopener noreferrer" aria-label={`${host.name} on Instagram`} className="text-moss transition-colors duration-300 hover:text-bone">
           <InstagramIcon size={18} />
         </a>
-        <a href={host.socials.linkedin} aria-label={`${host.name} on LinkedIn`} className="text-moss transition-colors duration-300 hover:text-bone">
+        <a href={host.socials.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${host.name} on LinkedIn`} className="text-moss transition-colors duration-300 hover:text-bone">
           <LinkedinIcon size={18} />
         </a>
       </div>
